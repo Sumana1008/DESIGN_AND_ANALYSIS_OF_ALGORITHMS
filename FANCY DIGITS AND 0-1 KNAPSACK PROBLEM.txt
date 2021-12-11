@@ -1,0 +1,90 @@
+ FANCY DIGITS AND 0-1 KNAPSACK PROBLEM
+1.John and Peter went for higher studies in Australia. John bought a car and
+requested peter to find a fancy number for his car. Peter had a puzzle for john
+to solve . The constraints were the vehicle number must have 3 digits. The
+difference between the first two digits should be 1. If a third digit has to be
+formed, it must be either 1 lesser or greater than the last digit of that number.
+Now what all numbers can be fancy if john has to choose between 1-5. Write
+down the Java program to implement this using dynamic programming.
+CODE:
+import java.util.*;
+public class Main{
+public static void main(String args[]){
+Scanner sc = new Scanner(System.in);
+int car[] = new int[3];
+for(int i = 1;i < 5;i++){
+car[0] = i;
+int count1 = 0;
+for(int j=0;j<2;j++){
+if(count1 == 0){
+car[1] = car[0]+1;
+count1 = 1;
+}else{
+car[1] = car[0]-1;
+}
+int count2 = 0;
+for(int k =0;k<2;k++){
+if(count2 == 0){
+car[2] = car[1]+1;
+count2 = 1;
+}else{
+car[2] = car[1]-1;
+}
+boolean con = true;
+for(int l =0;l<3;l++){
+if(!(car[l]>0 && car[l]<=5)){
+con = false;
+}
+}
+if(con){
+System.out.println(car[0]+" "+car[1]+" "+car[2]);
+}
+}
+}
+}
+}
+}
+
+2. Write a creative story that could implement 0-1 knapsack problem.
+Implement it using a Java program.
+CODE:
+CREATIVE STORY:
+Suppose you woke up on some mysterious island and there are different precious items
+on it. Each item has a different value and weight. You are also provided with a bag to
+take some of the items along with you but your bag has a limitation of the maximum
+weight you can put in it. So, you need to choose items to put in your bag such that the
+overall value of items in your bag maximizes.
+CODE:
+class Main {
+static int[][] cost = new int[4+1][5+1];
+public static int knapsack(int n, int W, int wm[], int vm[]) {
+for(int w=0; w<=W; w++) {
+cost[0][w] = 0;
+}
+for(int i=0; i<=n; i++) {
+cost[i][0] = 0;
+}
+for(int i=1; i<=n; i++) {
+for(int w=1; w<=W; w++) {
+if(wm[i] > w) {
+cost[i][w] = cost[i-1][w];
+}
+else {
+if (vm[i]+cost[i-1][w-wm[i]] > cost[i-1][w]) {
+cost[i][w] = vm[i] + cost[i-1][w-wm[i]];
+}
+else {
+cost[i][w] = cost[i-1][w];
+}
+}
+}
+}
+return cost[n][W];
+}
+public static void main(String[] args) {
+// element at index 0 is fake. matrix starting from 1.
+int wm[] = {0, 3, 2, 4, 1};
+int vm[] = {0, 8, 3, 9, 6};
+System.out.println(knapsack(4, 5, wm, vm));
+}
+}

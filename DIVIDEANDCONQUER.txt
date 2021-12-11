@@ -1,0 +1,211 @@
+1. Get the size of the array as input. Get the numbers. Do the circular shift based on the user
+input ‘k’. Implement in Java.
+We need to rotate the elements of array towards its right by the specified
+number of times. An array is said to be right rotated if all elements of the
+array are moved to its right by one position. One approach is to loop
+through the array by shifting each element of the array to its next position.
+The last element of the array will become the first element of the rotated
+array.
+import java.util.Arrays;
+class Main
+{
+// Function to right-rotate an array by one position
+public static void rightRotateByOne(int[] A)
+{
+int last = A[A.length - 1];
+for (int i = A.length - 2; i >= 0; i--) {
+A[i + 1] = A[i];
+}
+A[0] = last;
+}
+// Function to right-rotate an array by `k` positions
+public static void rightRotate(int[] A, int k)
+{
+// base case: invalid input
+if (k < 0 || k >= A.length) {
+return;
+}
+for (int i = 0; i < k; i++) {
+rightRotateByOne(A);
+}
+}
+public static void main(String[] args)
+{
+int[] A = { 8,9,10,11,12,13,14 };
+int k = 4;
+rightRotate(A, k);
+System.out.println(Arrays.toString(A));
+}
+}
+
+2. Apply divide and conquer(quick sort ) algorithm for the user input. If the user input comprises
+repeated numbers, how does the quick sort perform?
+CODE:
+import java.util.*;
+public class Main
+{
+int partition (int a[], int start, int end)
+{
+int pivot = a[end];
+int i = (start - 1);
+for (int j = start; j <= end - 1; j++)
+{
+if (a[j] < pivot)
+{
+i++;
+int t = a[i];
+a[i] = a[j];
+a[j] = t;
+}
+}
+int t = a[i+1];
+a[i+1] = a[end];
+a[end] = t;
+return (i + 1);
+}
+void quick(int a[], int start, int end)
+{
+if (start < end)
+{
+int p = partition(a, start, end);
+quick(a, start, p - 1);
+quick(a, p + 1, end);
+}
+}
+void printArr(int a[], int n)
+{
+int i;
+for (i = 0; i < n; i++)
+System.out.print(a[i] + " ");
+}
+public static void main(String[] args) {
+Scanner sc=new Scanner(System.in);
+int g=sc.nextInt();
+int[] a = new int[g];
+System.out.println("Enter the elements of the array: ");
+for(int i=0; i<g; i++)
+{
+a[i]=sc.nextInt();
+}
+int n = a.length;
+System.out.println("\nBefore sorting array elements are - ");
+Main q1 = new Main();
+q1.printArr(a, n);
+q1.quick(a, 0, n - 1);
+System.out.println("\nAfter sorting array elements are - ");
+q1.printArr(a, n);
+System.out.println();
+}
+}
+
+3. If merge sort is applied on the input that has repeated numbers, how the performance will be?
+import java.util.Arrays;
+class Main
+{
+public static final int RANGE = 100;
+// Function to efficiently sort an array with many duplicated values
+// using the counting sort algorithm
+public static void customSort(int[] arr)
+{
+// create a new array to store counts of elements in the input array
+int[] freq = new int[RANGE];
+// using the value of elements in the input array as an index,
+// update their frequencies in the new array
+for (int i: arr) {
+freq[i]++;
+}
+// overwrite the input array with sorted order
+int k = 0;
+for (int i = 0; i < RANGE; i++)
+{
+while (freq[i]-- > 0) {
+arr[k++] = i;
+}
+}
+}
+public static void main(String[] args)
+{
+int[] arr ={ 5, 1, 30, 20, 20, 7, 5, 7, 7, 20, 30 };
+customSort(arr);
+System.out.println(Arrays.toString(arr));
+}
+}
+5. Have you heard about hybrid sorting algorithm? Implement in Java.
+Hybrid Sorting Algorithm:
+Quicksort algorithm is efficient if the size of the input is very large. But,
+insertion sort is more
+efficient than quick sort in case of small arrays as the number of
+comparisons and swaps are less
+compared to quicksort. So, we combine the two algorithms to sort efficiently
+using both approaches.
+import java.io.*;
+class Main {
+private static void insertionSort(int a[], int low,
+int high)
+{
+for (int i = low + 1; i <= high; i++) {
+for (int j = i - 1; j >= low; j--) {
+if (a[j] > a[j + 1]) {
+// Swap
+int temp = a[j];
+a[j] = a[j + 1];
+a[j + 1] = temp;
+}
+else
+break;
+}
+}
+}
+private static int partition(int arr[], int low,
+int high)
+{
+int pivot = arr[high];
+int i = low;
+int j = low;
+while (i <= high) {
+if (arr[i] > pivot)
+i++;
+else {
+int temp = arr[i];
+arr[i] = arr[j];
+arr[j] = temp;
+i++;
+j++;
+}
+}
+return j - 1;
+}
+public static void hybridQuickSort(int arr[], int low,
+int high)
+{
+while (low < high) {
+// Check if array size on which we will be working is less than 10
+if (high - low < 10) {
+insertionSort(arr, low, high);
+break;
+}
+else {
+int pivot = partition(arr, low, high);
+// We will do recursion on small size
+// subarray So we can check pivot - low and
+// pivot - high
+if (pivot - low < pivot - high) {
+hybridQuickSort(arr, low, pivot - 1);
+low = pivot + 1;
+}
+else {
+hybridQuickSort(arr, pivot + 1, high);
+high = pivot - 1;
+}
+}
+}
+}
+public static void main(String[] args)
+{
+int arr[]
+= { 78,26,88,77,12,72,35,11,66,98};
+hybridQuickSort(arr, 0, arr.length - 1);
+for (int i : arr)
+System.out.print(i + " ");
+}
+}

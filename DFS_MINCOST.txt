@@ -1,0 +1,132 @@
+1.Find the minimum cost of travelling from SFO to your choice of
+place. Write a Java program to implement it.
+CODE:
+import java.util.*;
+import java.lang.*;
+class Main{
+static int V = 15;
+static int INF = Integer.MAX_VALUE;
+static int minimumCostSimplePath(int u, int destination,
+boolean visited[],
+int graph[][])
+{
+if (u == destination)
+return 0;
+visited[u] = true;
+int ans = INF;
+for(int i = 0; i < V; i++)
+{
+if (graph[u][i] != INF && !visited[i])
+{
+int curr = minimumCostSimplePath(i,
+destination, visited, graph);
+if (curr < INF)
+{
+ans = Math.min(ans, graph[u][i] + curr);
+}
+}
+}
+visited[u] = false;
+return ans;
+}
+public static void main(String[] args)
+{
+int graph[][] = new int[V][V];
+for(int i = 0; i < V; i++)
+{
+for(int j = 0; j < V; j++)
+{
+graph[i][j] = INF;
+}
+}
+boolean visited[] = new boolean[V];
+graph[0][1] = 130;
+graph[0][2] = 60;
+graph[0][3] = 70;
+graph[0][0] = 0;
+graph[1][0] = 130;
+graph[1][1] = 0;
+graph[1][2] = 250;
+graph[1][7] = 500;
+graph[2][0] = 60;
+graph[2][1] = 250;
+graph[2][2] = 0;
+graph[2][3] =170;
+graph[2][4] = 120;
+graph[3][0] = 70;
+graph[3][3] = 0;
+graph[3][2] = 170;
+graph[3][4] = 80;
+graph[3][5] = 50;
+graph[4][2] = 120;
+graph[4][3] = 80;
+graph[4][4] = 0;
+graph[4][6] = 140;
+graph[4][7] = 50;
+graph[5][3] = 50;
+graph[5][6] = 200;
+graph[5][5] = 0;
+graph[6][4] = 140;
+graph[6][5] = 200;
+graph[6][7] = 100;
+graph[6][6] = 0;
+graph[7][4] = 110;
+graph[7][6] = 100;
+graph[7][7] = 0;
+// Source and destination
+int s = 0, t = 2;
+// Marking the source as visited
+visited[s] = true;
+System.out.println(minimumCostSimplePath(s, t,
+visited, graph));
+}
+}
+
+
+Q2) Implement DFS for the graph in Java
+import java.util.*;
+public class Main {
+private LinkedList<Integer> adjLists[];
+private boolean visited[];
+Main(int vertices)
+{
+adjLists = new LinkedList[vertices];
+visited = new boolean[vertices];
+for (int i = 0; i < vertices; i++)
+adjLists[i] = new LinkedList<Integer>();
+}
+void addEdge(int src, int dest)
+{
+adjLists[src].add(dest);
+}
+void DFS(int vertex) {
+visited[vertex] = true;
+System.out.print(vertex + " ");
+Iterator<Integer> ite = adjLists[vertex].listIterator();
+while (ite.hasNext())
+{
+int adj = ite.next();
+if (!visited[adj])
+DFS(adj);
+}
+}
+public static void main(String args[])
+{
+Main g = new Main(11);
+g.addEdge(0, 1);
+g.addEdge(0, 3);
+g.addEdge(0, 4);
+g.addEdge(1, 4);
+g.addEdge(2, 4);
+g.addEdge(2, 8);
+g.addEdge(3, 6);
+g.addEdge(3, 7);
+g.addEdge(4, 5);
+g.addEdge(5, 2);
+g.addEdge(6, 7);
+g.addEdge(7, 5);
+g.addEdge(7, 8);
+System.out.println("Following is Depth First Traversal");
+g.DFS(2);
+}
+}
